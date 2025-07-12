@@ -8,6 +8,7 @@ import { url } from "inspector";
 
 @Injectable()
 export class channelService{
+
     constructor(private cloudinaryService:cloudinaryService,
         private databaseService : databaseService
     ){}
@@ -26,6 +27,7 @@ export class channelService{
        
 
         let uploadUrl;
+
         try {
             
              uploadUrl = await this.cloudinaryService.uploadToCloudinary(file.buffer,id);
@@ -40,9 +42,38 @@ export class channelService{
             data:{
                 channelName:request.body.channelName,
                 channelDescription:request.body.channelDescription,
-                picture:uploadUrl
+                picture:uploadUrl,
+                about:request.body.about
             }
            })
-       return uploadUrl
+
+       return {success:true,message:uploadUrl}
+    }
+
+    async getChannelDetails(request : request) {
+
+        const id = request.userId
+
+        const user = await  this.databaseService.user.findUnique({
+            where:{id:id},
+            select:{channelId:true}
+        })
+
+        const channel = await  this.databaseService.channel.findUnique({
+            where:{id: user.channelId},
+           })
+
+        if(!channel){
+            return  {
+                success:false,
+                message:"channel does not exist"
+            }
+        }
+
+        return {
+            success:true,
+            
+            channel
+        }
     }
 }

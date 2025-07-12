@@ -1,23 +1,20 @@
-import { Body, Controller, Post, Req } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import { authService } from "./auth.service";
-import { Request } from "express";
-import { AuthDto } from "src/engine/types/authDto";
-import { dot } from "node:test/reporters";
+import { AuthDto, AuthDto2 } from "src/engine/types/authDto"; // ✅ corrected import
+// Removed unused imports
 
 @Controller('auth')
-export class authController{
-     constructor(private authService:authService){
+export class authController {
+  constructor(private readonly authService: authService) {}
 
-        
-     }
+  @Post('signup')
+  async Signup(@Body() dto: AuthDto) {
+    console.log('Signup DTO:', dto); // ✅ Optional for debugging
+    return this.authService.Signup(dto);
+  }
 
-     @Post('signup')
-     Signup(@Body() dto:AuthDto){
-            return this.authService.Signup(dto)
-     }
-
-     @Post('signin')
-     Signin(@Body() dto:AuthDto){
-        return this.authService.Signin(dto)
-     }
+  @Post('signin')
+  async Signin(@Body() dto: AuthDto2) {
+    return this.authService.Signin(dto);
+  }
 }

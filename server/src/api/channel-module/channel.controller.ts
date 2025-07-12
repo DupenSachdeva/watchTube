@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AuthGuard } from "src/engine/core/gaurds/authorization.gaurd";
 import { channelDto } from "src/engine/types/channelCreateDto";
 import { channelService } from "./channel.service";
@@ -11,6 +11,7 @@ import { cloudinaryService } from "src/engine/core/services/cloudinary.service";
 @Controller('channel')
 
 export class channelController{
+    
     constructor(private channelService:channelService,
         private cloudinaryService:cloudinaryService
     ){}
@@ -31,5 +32,11 @@ export class channelController{
                 
       return  this.channelService.updateChannel(request,file)
         
+    }
+
+    @Get('/details')
+    @UseGuards(AuthGuard)
+    getChannelDetails( @Req() request:request){
+        return this.channelService.getChannelDetails(request)
     }
 }

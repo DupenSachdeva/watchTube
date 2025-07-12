@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { buffer } from 'stream/consumers';
 
 @Injectable()
+
 export class cloudinaryService {
 
   constructor(private configService:ConfigService) {

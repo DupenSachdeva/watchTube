@@ -1,32 +1,91 @@
-import { useEffect, useState } from "react"
-import axios from "axios"
-interface User{
-    name:string,
-    email:string,
-    password:string
-}
-export function useAuth(userobj:User){
-    
-    const [loading,setLoading] = useState(true);
-    const [data,setData] = useState();
-    const [error,setError] = useState("");
+import { useSetRecoilState } from 'recoil';
+// hooks/use-auth.ts
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../config/config";
+import { usernameAtom, usernameEmail } from "../recoil/atoms/userAtom";
 
-    axios.post("http://localhost:3000/auth/signup",{
-        username:userobj.name,
-        email:userobj.email,
-        password:userobj.password
-    }).then((res)=>{
+export const useAuth = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false)
+  const navigate = useNavigate(); 
 
-        if(!res.data.success)
-            setError(res.data.message)
+  const setusername = useSetRecoilState(usernameAtom);
+  const setuseremail = useSetRecoilState(usernameEmail);
 
-        else{
-            localStorage.setItem("token",res.data.token)
-        }
+  const signup = async (name: string, email: string, password: string) => {
+    setLoading(true);
+    setError(false);
 
-    }).catch((err)=>{
-        setError(err)
-    }).finally(()=>{setLoading(false)})
+    try {
+      const res = await fetch(`${BACKEND_URL}/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
 
-    return [loading,error];
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setError(true);
+      } else {
+        localStorage.setItem("token", data.token);
+        setusername(name)
+        setuseremail(email)
+
+        navigate("/home"); // ✅ Navigate after success
+      }
+    } catch (err: any) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { signup, loading, error };
+};
+
+export const useAuth2 = () =>{
+
+    const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false)
+  const navigate = useNavigate(); 
+
+  const setusername = useSetRecoilState(usernameAtom);
+  const setuseremail = useSetRecoilState(usernameEmail);
+
+  const signup = async ( email: string, password: string) => {
+    setLoading(true);
+    setError(false);
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/auth/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setError(true);
+      } else {
+        localStorage.setItem("token", data.token);
+        setusername(data.user.name)
+        setuseremail(email)
+
+        navigate("/home"); // ✅ Navigate after success
+      }
+    } catch (err: any) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { signup, loading, error };
 }

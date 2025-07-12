@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { hash, verify } from "argon2";
 import { databaseService } from "src/engine/database/database.service";
-import { AuthDto } from "src/engine/types/authDto";
+import { AuthDto, type AuthDto2 } from "src/engine/types/authDto";
 import * as jwt from "jsonwebtoken"
 import { ConfigService } from "@nestjs/config";
 @Injectable()
@@ -63,22 +63,25 @@ export class authService{
     }
     
 
-    async Signin(dto:AuthDto){
+    async Signin(dto:AuthDto2){
           let user =await  this.databaseService.user.findUnique({
             where:{
-                name:dto.name,
                 email:dto.email,
             }
           })
           
           if(!user)
-            return {message:"user does not exists"}
+            return {
+                success:false,
+                message:"user does not exists"}
           
           const matchPassword =await  verify(user.password,dto.password)
           
           if(!matchPassword)
           {
-                  return {message:"invalid password"}
+                  return {
+                    success:false,
+                    message:"invalid password"}
           }
           
           const payload = {userId:user.id}

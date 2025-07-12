@@ -9,69 +9,90 @@ import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Camera, Upload, User } from "lucide-react"
 import axios from 'axios'
-import SuccessMessage from '@/UtilComponents/Success/Success'
+import SuccessMessage from '@/UtilComponents/Success'
+import Error from '../../UtilComponents/error'
+import { BACKEND_URL } from '../../config/config'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { channelAtom } from '../../recoil/atoms/channelAtom'
+import { read } from 'fs'
+import Success from '@/UtilComponents/Success'
+
 
 export default function CreateChannel() {
   const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(false);
+
   const [picture, setPicture] = useState<File | null>(null);
-  const [channelData, setChannelData] = useState({
-    name: '',
-    description: '',
-    pictureUrl: null as string | null
-  });
+  const [pictureUrl , setpictureUrl] = useState("");
+  const [channelName,setChannelName] = useState("");
+  const [channelDescription,setChannelDescription] = useState("");
+  const [about , setAbout] = useState("");
+
+    const [channelData, setChannelData] = useRecoilState(channelAtom);
+
+  
+  
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setPicture(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setChannelData(prev => ({ ...prev, pictureUrl: reader.result as string }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const file = e.target.files?.[0];
+  if (file) {
+    setPicture(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (reader.result != null) {
+        setChannelData(prev => ({
+          ...prev,
+          pictureUrl: reader.result!.toString(), // ✅ updates the atom directly
+        }));
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+};
 
   const handleSubmit = async () => {
-    setError(null);
+    setError(false);
 
     if (!picture || !channelData.name || !channelData.description) {
-      setError("All fields including picture are required.");
+      setError(true);
       return;
     }
 
     try {
+
       const formData = new FormData();
       formData.append('file', picture);
       formData.append('channelName', channelData.name);
       formData.append('channelDescription', channelData.description);
+      formData.append('about',channelData.about);
 
-      await axios.put('http://localhost:3000/channel/update', formData, {
+      const res = await axios.put(`${BACKEND_URL}/channel/update`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          authorization: localStorage.getItem('token') || ''
+          authorization: localStorage.getItem('token') 
         },
       });
-
+      
+      if(res.data.success==true){
       setIsSuccess(true);
+      setChannelData({...channelData , pictureUrl:res.data.message});
+      console.log(channelData.pictureUrl);
+      
+      }
     } catch (err: any) {
       console.error(err);
-      const message = err?.response?.data?.message || "Something went wrong";
-      setError(message);
+      setError(true);
     }
   };
 
   return (
     <>
       {isSuccess && (
-        <SuccessMessage message="Channel updated successfully" setIsSuccess={setIsSuccess} />
+        <Success />
       )}
 
       {error && (
-        <div className="bg-red-100 text-red-700 p-3 rounded mb-4 max-w-2xl mx-auto text-sm">
-          {error}
-        </div>
+        <Error></Error>
       )}
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 text-gray-800 p-4 md:p-8">
@@ -115,6 +136,17 @@ export default function CreateChannel() {
                       </Label>
                     </div>
                   </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="about">About</Label>
+                  <Input
+                    id="about"
+                    placeholder="About You"
+                    value={channelData.about}
+                    onChange={(e) => setChannelData(prev => ({ ...prev, about: e.target.value }))}
+                    className="bg-white bg-opacity-50 border-none placeholder-gray-400 text-gray-800 focus:ring-2 focus:ring-purple-500"
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -171,6 +203,13 @@ export default function CreateChannel() {
 
                 <div className="space-y-2">
                   <h4 className="font-medium">About</h4>
+                  <p className="text-sm text-gray-600">
+                    {channelData.about || 'about you'}
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Desscription</h4>
                   <p className="text-sm text-gray-600">
                     {channelData.description || 'Your channel description will appear here...'}
                   </p>

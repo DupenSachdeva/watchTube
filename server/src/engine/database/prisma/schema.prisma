@@ -32,6 +32,7 @@ model Channel {
   channelName String   @unique
   channelDescription String
   picture     String
+  about        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
