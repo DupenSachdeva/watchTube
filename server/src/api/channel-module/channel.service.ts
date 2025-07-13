@@ -1,18 +1,18 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import {  Injectable } from "@nestjs/common";
 import { request } from "src";
-import { cloudinaryService } from "src/engine/core/services/cloudinary.service";
-import { databaseService } from "src/engine/database/database.service";
-import { channelDto } from "src/engine/types/channelCreateDto";
-import * as cloudinary from 'cloudinary';
-import { url } from "inspector";
+import { CloudinaryService } from "src/engine/core/services/cloudinary.service";
+import { DatabaseService } from "src/engine/database/database.service";
+
 
 @Injectable()
 export class channelService{
 
-    constructor(private cloudinaryService:cloudinaryService,
-        private databaseService : databaseService
+    constructor(private readonly cloudinaryService:CloudinaryService,
+        private databaseService : DatabaseService,
     ){}
     
+    
+
     async updateChannel(request:request,file:Express.Multer.File){
 
         

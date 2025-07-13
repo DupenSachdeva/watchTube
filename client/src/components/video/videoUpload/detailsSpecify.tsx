@@ -20,13 +20,22 @@ import { useNavigate } from "react-router-dom"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Switch } from "../../ui/switch"
 import { cn } from "../../../lib/utils"
+import axios from "axios"
+import { BACKEND_URL } from "../../../config/config"
+import { UploadVideo } from "."
+
+import { useVideoUpload } from "../../../hooks/useUploadVideo"
 
 const DetailsSpecify: React.FC<ChildProps> = ({ currentStep, setCurrentStep }) => {
+
   const { video } = useUploadContext()
+
   const navigate = useNavigate()
 
   const [videoPayload, setVideoPayload] = useState<UploadPayload>({
+
     videoFile: video,
+
     title: "",
     description: "",
     tags: [],
@@ -64,6 +73,36 @@ const DetailsSpecify: React.FC<ChildProps> = ({ currentStep, setCurrentStep }) =
     setThumbnailUrl(previewUrl)
   }
 
+   
+    const thumbnail = videoPayload.thumbnail
+    const title = videoPayload.title
+    const description = videoPayload.description
+    const visibility = videoPayload.visibility
+    const videoFile = video
+
+        const { uploadVideoinHook,   isUploading, uploadProgress, error } = useVideoUpload();
+
+
+
+  const handlePublish = async () => {
+         
+    try {
+      const result = await uploadVideoinHook({
+        videoFile,
+        thumbnail,
+        title,
+        description,
+        visibility
+      });
+      alert("Video uploaded successfully!");
+      console.log(result);
+    } catch {
+      alert("Video upload failed.");
+    }
+
+
+  }
+
   return (
     <>
       {currentStep === "details" && (
@@ -83,7 +122,6 @@ const DetailsSpecify: React.FC<ChildProps> = ({ currentStep, setCurrentStep }) =
                   <TabsTrigger value="advanced">Advanced</TabsTrigger>
                 </TabsList>
 
-                {/* Basic Info */}
                 <TabsContent value="basic" className="space-y-6 mt-6">
                   <div>
                     <Label htmlFor="title" className="flex items-center gap-2">
@@ -98,14 +136,10 @@ const DetailsSpecify: React.FC<ChildProps> = ({ currentStep, setCurrentStep }) =
                           title: e.target.value,
                         }))
                       }
-                      placeholder="Enter an engaging title for your video"
+                      placeholder="Enter a title"
                       maxLength={100}
                       className="mt-2"
                     />
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      <span>Make it catchy and descriptive</span>
-                      <span>{videoPayload.title.length}/100</span>
-                    </div>
                   </div>
 
                   <div>
@@ -119,26 +153,23 @@ const DetailsSpecify: React.FC<ChildProps> = ({ currentStep, setCurrentStep }) =
                           description: e.target.value,
                         }))
                       }
-                      placeholder="Tell viewers about your video (first 125 characters appear in search)"
+                      placeholder="Add a video description"
                       rows={6}
                       maxLength={5000}
                       className="mt-2"
                     />
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      <span>Include relevant keywords and timestamps</span>
-                      <span>{videoPayload.description.length}/5000</span>
-                    </div>
                   </div>
                 </TabsContent>
 
-                {/* Thumbnail Upload */}
                 <TabsContent value="thumbnails" className="space-y-6 mt-6">
                   <div>
                     <Label className="flex items-center gap-2">
                       <ImageIcon className="w-4 h-4" />
                       Custom Thumbnail
                     </Label>
-                    <p className="text-sm text-gray-600 mb-4">Upload eye-catching thumbnails to attract viewers</p>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Upload eye-catching thumbnails
+                    </p>
 
                     <Button
                       type="button"
@@ -147,7 +178,7 @@ const DetailsSpecify: React.FC<ChildProps> = ({ currentStep, setCurrentStep }) =
                       className="w-full mb-4"
                     >
                       <ImageIcon className="w-4 h-4 mr-2" />
-                      Upload Thumbnail (JPG, PNG)
+                      Upload Thumbnail
                     </Button>
 
                     <input
@@ -185,7 +216,7 @@ const DetailsSpecify: React.FC<ChildProps> = ({ currentStep, setCurrentStep }) =
                 </TabsContent>
 
                 <TabsContent value="advanced" className="space-y-6 mt-6">
-                  {/* Advanced tab content here (if needed) */}
+                  {/* Advanced content here */}
                 </TabsContent>
               </Tabs>
 
@@ -229,26 +260,24 @@ const DetailsSpecify: React.FC<ChildProps> = ({ currentStep, setCurrentStep }) =
                     }
                     className="mt-3 space-y-3"
                   >
-                    {[
-                      {
-                        label: "Public",
-                        value: "public",
-                        description: "Anyone can search for and view",
-                        icon: <Globe className="w-4 h-4 text-green-600" />,
-                      },
-                      {
-                        label: "Unlisted",
-                        value: "unlisted",
-                        description: "Anyone with the link can view",
-                        icon: <EyeOff className="w-4 h-4 text-yellow-600" />,
-                      },
-                      {
-                        label: "Private",
-                        value: "private",
-                        description: "Only you can view",
-                        icon: <Shield className="w-4 h-4 text-red-600" />,
-                      },
-                    ].map((item) => (
+                    {[{
+                      label: "Public",
+                      value: "public",
+                      description: "Anyone can view",
+                      icon: <Globe className="w-4 h-4 text-green-600" />,
+                    },
+                    {
+                      label: "Unlisted",
+                      value: "unlisted",
+                      description: "Only with link",
+                      icon: <EyeOff className="w-4 h-4 text-yellow-600" />,
+                    },
+                    {
+                      label: "Private",
+                      value: "private",
+                      description: "Only you",
+                      icon: <Shield className="w-4 h-4 text-red-600" />,
+                    }].map((item) => (
                       <div
                         key={item.value}
                         className={cn(
@@ -287,16 +316,27 @@ const DetailsSpecify: React.FC<ChildProps> = ({ currentStep, setCurrentStep }) =
             </Button>
             <div className="space-x-4">
               <Button
-                 onClick={()=>{
-
-                    
-                 }}
+                onClick={handlePublish}
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8"
-                                              >
+                disabled={!videoPayload.title.trim()}
+              >
                 Publish Video
               </Button>
+
+              
+
+      
             </div>
           </div>
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+      {isUploading && (
+        <div className="mt-2 w-full bg-gray-300 rounded-full h-6 overflow-hidden">
+          <div
+            className="bg-blue-600 h-full transition-all duration-30000000 ease-out"
+            style={{ width: `${uploadProgress}%` }}
+          ></div>
+        </div>
+      )}
         </>
       )}
     </>

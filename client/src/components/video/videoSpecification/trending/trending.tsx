@@ -1,7 +1,7 @@
-import { VideoCard } from "@/components/video/VideoCard";
+import { VideoCard } from "@/components/video/VideoFeed";
+import VideoFeed from "../../VideoFeed/VideoFeed";
 
 export default function Trending(){
     return <>
-         <VideoCard></VideoCard>
-    </>
+         <VideoFeed></VideoFeed>    </>
 }

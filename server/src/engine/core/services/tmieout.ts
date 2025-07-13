@@ -1,0 +1,23 @@
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+} from '@nestjs/common';
+import { Observable, TimeoutError, throwError } from 'rxjs';
+import { catchError, timeout } from 'rxjs/operators';
+
+@Injectable()
+export class TimeoutInterceptor implements NestInterceptor {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    return next.handle().pipe(
+      timeout(180000), // ✅ Set timeout to 3 minutes
+      catchError((err) => {
+        if (err instanceof TimeoutError) {
+          return throwError(() => new Error('Timeout waiting for parallel processing.'));
+        }
+        return throwError(() => err);
+      }),
+    );
+  }
+}

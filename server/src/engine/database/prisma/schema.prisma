@@ -59,11 +59,17 @@ model Video{
 
   title String
   description String
+  visibility Visibility @default(Public)
+  
+  thumbnailUrl String?
+  hlsUrl String?
+
+
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
-  thumbnail String 
-  visibility Visibility @default(Public)
-  Category Category 
+  
+
   tags String[]
   ageRestriction Boolean @default(false)
   monetization Boolean @default(false)

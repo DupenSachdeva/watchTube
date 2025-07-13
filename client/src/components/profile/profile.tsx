@@ -74,7 +74,7 @@ export default function ProfilePage() {
             <div className="mt-8 text-center">
               <Button size="lg" className="bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 text-white hover:from-red-600 hover:via-purple-600 hover:to-blue-600"
               onClick={()=>{
-                navigate("uploadVideo")
+                navigate("/home/uploadVideo")
               }}
               >
                 <Upload className="w-5 h-5 mr-2" />

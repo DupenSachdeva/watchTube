@@ -6,7 +6,7 @@ export interface UploadPayload {
   category: string
   visibility: "public" | "unlisted" | "private"
   language: string
-  thumbnail?: File
+  thumbnail?: File | null
   captions?: File
   isShort: boolean
   monetizationEnabled: boolean

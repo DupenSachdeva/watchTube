@@ -199,7 +199,7 @@ export default function Signin() {
           <button
             type="button"
             className="text-blue-400 hover:text-blue-300 font-semibold transition-colors duration-200 hover:underline"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/signup")}
           >
             Create your account here
           </button>

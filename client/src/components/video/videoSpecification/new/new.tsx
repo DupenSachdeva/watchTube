@@ -1,7 +1,8 @@
-import { VideoCard } from "@/components/video/VideoCard";
+import { VideoCard } from "@/components/video/VideoFeed";
+import VideoFeed from "../../VideoFeed/VideoFeed";
 
 export default function New(){
     return <>
-    <VideoCard></VideoCard>
+    <VideoFeed></VideoFeed>
     </>
 }

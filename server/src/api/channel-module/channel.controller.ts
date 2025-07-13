@@ -6,14 +6,14 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { request } from "src";
 import { diskStorage } from "multer";
 import { extname } from "path";
-import { cloudinaryService } from "src/engine/core/services/cloudinary.service";
+import { CloudinaryService } from "src/engine/core/services/cloudinary.service";
 
 @Controller('channel')
 
 export class channelController{
     
     constructor(private channelService:channelService,
-        private cloudinaryService:cloudinaryService
+        private cloudinaryService:CloudinaryService
     ){}
 
     @Put('/update')

@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { hash, verify } from "argon2";
-import { databaseService } from "src/engine/database/database.service";
+import { DatabaseService } from "src/engine/database/database.service";
 import { AuthDto, type AuthDto2 } from "src/engine/types/authDto";
 import * as jwt from "jsonwebtoken"
 import { ConfigService } from "@nestjs/config";
 @Injectable()
 export class authService{
-    constructor(private databaseService:databaseService,private configService :ConfigService){}
+    constructor(private databaseService:DatabaseService,private configService :ConfigService){}
 
     async Signup(dto:AuthDto){
 
