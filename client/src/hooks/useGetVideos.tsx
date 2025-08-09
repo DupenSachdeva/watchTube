@@ -20,7 +20,7 @@ export function useGetVideos() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `${BACKEND_URL}/video/get?page=${pageNumber}&limit=9`
+        `${BACKEND_URL}/video/get?page=${pageNumber}&limit=6`
       );
 
       const newVideos: Video[] = res.data.videos;
@@ -29,6 +29,10 @@ export function useGetVideos() {
         setHasMore(false);
       } else {
         setVideos(prev => [...prev, ...newVideos]);
+        console.log("url is ");
+        
+        console.log(newVideos[0].channelUrl);
+        
         setPage(pageNumber);
       }
     } catch (err) {

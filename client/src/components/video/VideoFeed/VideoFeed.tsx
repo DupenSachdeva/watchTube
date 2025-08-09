@@ -18,7 +18,7 @@ export default function VideoFeed() {
 
     <ScrollArea className="h-[calc(100vh-9rem)]">
 
-      <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
+      <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3">
         {videos.map((video) => (
           <VideoCard key={video.id} video={video} />
         ))}

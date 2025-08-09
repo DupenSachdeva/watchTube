@@ -53,7 +53,7 @@ export default function CreateChannel() {
   const handleSubmit = async () => {
     setError(false);
 
-    if (!picture || !channelData.name || !channelData.description) {
+    if (!picture || !channelData.name) {
       setError(true);
       return;
     }

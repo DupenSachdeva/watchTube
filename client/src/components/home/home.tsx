@@ -12,6 +12,7 @@ import Success from "../../UtilComponents/Success";
 import Error from "../../UtilComponents/error";
 
 export default function Home(){
+  
     const location = useLocation();
     const isProfileRoute = location.pathname=== "/home/profile" || location.pathname === "/home/channel-info"
     

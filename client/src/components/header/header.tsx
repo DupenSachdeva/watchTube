@@ -8,13 +8,18 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useRecoilValue } from "recoil"
 import { usernameAtom, usernameEmail } from "../../recoil/atoms/userAtom"
+import { channelAtom } from "../../recoil/atoms/channelAtom"
+import { isLoggedInatom } from "../../recoil/atoms/isLoggedIn"
 
 export default function Header() {
   const navigate = useNavigate()
   const [sidebarOpen, setSideBarOpen] = useState(false)
   const name = useRecoilValue(usernameAtom)
   const email = useRecoilValue(usernameEmail)
-
+  const channel = useRecoilValue(channelAtom)
+  const isLoggedIn = useRecoilValue(isLoggedInatom)
+  console.log(name);
+  
   return (
     <>
       <header className="p-4 flex justify-between items-center bg-white backdrop-blur-sm shadow-sm border-b border-slate-200">
@@ -26,7 +31,11 @@ export default function Header() {
           >
             <Menu className="h-6 w-6" />
           </Button>
-          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-slate-700 to-sky-600">
+          <h1 className=" cursor-pointer text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-slate-700 to-sky-600"
+          onClick={()=>{
+            navigate('/home')
+          }}
+          >
             ColorTube
           </h1>
         </div>
@@ -57,12 +66,12 @@ export default function Header() {
           >
             <Bell className="h-6 w-6" />
           </Button>
-          <Avatar className="hover:text-sky-700">
-            <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
-            <AvatarFallback
-              onClick={() => {
+          <Avatar className="hover:text-sky-700" onClick={() => {
                 setSideBarOpen(!sidebarOpen)
-              }}
+              }}>
+            <AvatarImage src={`${channel.pictureUrl}`} alt="User" className="w-8 rounded-full cursor-pointer"/>
+            <AvatarFallback
+              
             >
               <User className="h-6 w-6 cursor-pointer text-slate-700 hover:text-sky-700" />
             </AvatarFallback>
@@ -78,7 +87,7 @@ export default function Header() {
         <div className="p-6 space-y-6">
           <div className="flex items-center space-x-4">
             <Avatar className="w-16 h-16 flex items-center">
-              <AvatarImage src="/placeholder.svg?height=64&width=64" alt="User" />
+              <AvatarImage src={`${channel.pictureUrl}`} alt="User"  className="w-12 rounded-full"/>
               <AvatarFallback>
                 <User className="h-8 w-8 text-slate-600" />
               </AvatarFallback>
@@ -120,13 +129,33 @@ export default function Header() {
             </Button>
           </nav>
           <hr className="border-slate-200" />
-          <Button
+          
+          
+          {isLoggedIn && (<Button
             variant="ghost"
             className="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-700 rounded-lg transition-colors duration-200"
+
+            onClick={()=>{
+              localStorage.removeItem('token');
+              navigate('/signin')
+            }}
           >
-            <LogOut className="mr-2 h-5 w-5" />
+            <LogOut className="mr-2 h-5 w-5"  />
             Log Out
-          </Button>
+          </Button>)}
+
+          {!isLoggedIn && (<Button
+            variant="ghost"
+            className="w-full justify-start bg-blue-300 hover:bg-red-50 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+            onClick={()=>{
+              navigate('/signin')
+            }}
+          >
+            
+            Sign In
+          </Button>)}
+
+
         </div>
       </aside>
     </>

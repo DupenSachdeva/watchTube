@@ -12,8 +12,10 @@ export interface Video{
   uploadedAt:Date,
   
   channel:string,
+  channelId:number
   channelUrl:string
   userId:number
+  subscriptions:number
 
 }
 

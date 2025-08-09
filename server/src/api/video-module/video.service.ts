@@ -100,7 +100,9 @@ export class VideosService {
             channel:{
               select:{
                 channelName:true,
-                picture:true
+                picture:true,
+                id:true,
+                subscribers:true
               }
             }
           },
@@ -119,6 +121,8 @@ export class VideosService {
         userId: video.user.id,
         channel: video.user.name,
         channelUrl: video.user.channel.picture,
+        channelId:video.user.channel.id,
+        subscriptions:video.user.channel.subscribers
       })),
     };
   }

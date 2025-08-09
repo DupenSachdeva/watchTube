@@ -63,10 +63,13 @@ export class authService{
     }
     
 
-    async Signin(dto:AuthDto2){
-          let user =await  this.databaseService.user.findUnique({
+    async Signin(   body:  Record<string, any>
+){
+          console.log("hi signin");
+          
+          let user = await  this.databaseService.user.findUnique({
             where:{
-                email:dto.email,
+                email:body.email,
             }
           })
           
@@ -75,7 +78,7 @@ export class authService{
                 success:false,
                 message:"user does not exists"}
           
-          const matchPassword =await  verify(user.password,dto.password)
+          const matchPassword =await  verify(user.password,body.password)
           
           if(!matchPassword)
           {
@@ -85,8 +88,13 @@ export class authService{
           }
           
           const payload = {userId:user.id}
+
           const token = jwt.sign(payload,"tt",{expiresIn:"1hr"})
-          return token;
+
+          return {
+            token , 
+            name:user.name
+          };    
     }
 
     async ifUserExists(dto:AuthDto){

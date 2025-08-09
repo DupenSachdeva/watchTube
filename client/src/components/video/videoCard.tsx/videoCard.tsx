@@ -12,7 +12,8 @@ interface Props {
 
 const VideoCard = ({ video }: Props) => {
     const navigate = useNavigate();
-
+  console.log(video.channelUrl);
+  
   const handleClick = () => {
     console.log(video.id);
     
@@ -20,22 +21,23 @@ const VideoCard = ({ video }: Props) => {
 
   };
   return (
+
 <div className="cursor-pointer" onClick={handleClick}>
-    <Card className="cursor-pointer bg-white bg-opacity-80 backdrop-blur-sm shadow-md overflow-hidden group hover:shadow-lg transition-shadow duration-300"
-    >
-      <CardHeader className="p-0">
-        <div className="relative aspect-video bg-gray-200"     
->
-          <img
-            src={video.thumbnailUrl}
-            alt={`Thumbnail for ${video.title}`}
-            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-          />
-          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <Play className="w-12 h-12 text-white" />
-          </div>
-        </div>
-      </CardHeader>
+
+    <Card className="cursor-pointer bg-white bg-opacity-80 backdrop-blur-sm shadow-md overflow-hidden group hover:shadow-lg transition-shadow duration-300 w-full ">
+  <CardHeader className="p-0">
+    <div className=" relative w-full h-48 aspect-video bg-gray-200">
+      <img
+        src={video.thumbnailUrl}
+        alt={`Thumbnail for ${video.title}`}
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+      />
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <Play className="w-12 h-12 text-white" />
+      </div>
+    </div>
+  </CardHeader>
+
       <CardContent className="p-4">
         <CardTitle className="text-lg mb-2 line-clamp-2 text-gray-800">{video.title}</CardTitle>
         <div className="flex items-center space-x-2">

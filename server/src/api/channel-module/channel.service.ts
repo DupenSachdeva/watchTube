@@ -37,7 +37,7 @@ export class channelService{
             
         }
        
-        const updatedChannel =await  this.databaseService.channel.update({
+        const updatedChannel = await  this.databaseService.channel.update({
             where:{id: user.channelId},
             data:{
                 channelName:request.body.channelName,
@@ -46,7 +46,8 @@ export class channelService{
                 about:request.body.about
             }
            })
-
+       console.log(uploadUrl);
+       
        return {success:true,message:uploadUrl}
     }
 
@@ -56,7 +57,7 @@ export class channelService{
 
         const user = await  this.databaseService.user.findUnique({
             where:{id:id},
-            select:{channelId:true}
+            select:{channelId:true,email:true}
         })
 
         const channel = await  this.databaseService.channel.findUnique({
@@ -69,11 +70,124 @@ export class channelService{
                 message:"channel does not exist"
             }
         }
-
+        console.log(channel);
+        
         return {
             success:true,
-            
+            email:user.email,
             channel
+        }
+    }
+
+    async subscribe(request:request,body:Record<string,any>){
+
+         const userId = request.userId;
+
+         const channelId = body.channelId;
+
+        console.log(userId);
+        
+         console.log(channelId);
+         
+        const updatedchannel = await  this.databaseService.channel.update({
+            where:{
+                id:channelId
+            },
+            data:{
+                subscribers:{
+                    increment:1
+                }
+            }
+        })
+
+        const userSubscriptions = await this.databaseService.user.update({
+            where:{
+                id:userId
+            },
+            data:{
+                subscriptions:{
+                  connect:{
+                    id:channelId
+                  }
+                }
+            }
+        })
+
+        return {
+            Success:true
+        }
+
+
+
+    }
+
+    async unsubscribe(request:request,body:Record<string,any>){
+
+         const userId = request.userId;
+         const channelId = body.channelId;
+
+        const updatedchannel = await  this.databaseService.channel.update({
+            where:{
+                id:channelId
+            },
+            data:{
+                subscribers:{
+                    decrement:1
+                }
+            }
+        })
+
+        const userSubscriptions = await this.databaseService.user.update({
+            where:{
+                id:userId
+            },
+            data:{
+                subscriptions:{
+                  disconnect:{
+                    id:channelId
+                  }
+                }
+            }
+        })
+
+        return {
+            Success:true
+        }
+
+
+
+    }
+
+    async checkSubscriptionStatus(request:request, body:Record<string,any>){
+
+        const userId = request.userId;
+        const channelId = body.channelId;
+
+        const channel  = await this.databaseService.user.findUnique({
+            where:{
+                id:userId,
+                subscriptions:{
+                    some:{
+                        id:channelId
+                    },
+                },
+            },
+            select:{
+                id:true
+            }
+            
+        })
+
+        if(channel){
+            return {
+                isSubscribed:true
+            }
+
+        }
+        else{
+            return {
+                isSubscribed:false
+            }
         }
     }
 }

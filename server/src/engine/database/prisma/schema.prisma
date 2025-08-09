@@ -14,30 +14,36 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           Int       @id @default(autoincrement())
+  name         String    @unique
+  email        String    @unique
+  password     String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
-  channel   Channel  @relation(fields: [channelId], references: [id])
-  channelId Int      @unique
+  channel      Channel   @relation(fields: [channelId], references: [id])
+  channelId    Int       @unique
 
-  videos Video[]
+  subscriptions Channel[] @relation("UserSubscriptions")
+
+  videos       Video[]
 }
 
 model Channel {
-  id          Int      @id @default(autoincrement())
-  channelName String   @unique
+  id                 Int       @id @default(autoincrement())
+  channelName        String    @unique
   channelDescription String
-  picture     String
-  about        String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  picture            String
+  about              String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  subscribers        Int       @default(0)
 
-  user        User?
+  user               User?
+
+  subscribedByUsers  User[]    @relation("UserSubscriptions")
 }
+
 
 enum Visibility{
    Public

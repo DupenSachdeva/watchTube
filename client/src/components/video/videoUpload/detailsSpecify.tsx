@@ -25,6 +25,8 @@ import { BACKEND_URL } from "../../../config/config"
 import { UploadVideo } from "."
 
 import { useVideoUpload } from "../../../hooks/useUploadVideo"
+import { useRecoilValue } from "recoil"
+import { isLoggedInatom } from "../../../recoil/atoms/isLoggedIn"
 
 const DetailsSpecify: React.FC<ChildProps> = ({ currentStep, setCurrentStep }) => {
 
@@ -51,9 +53,10 @@ const DetailsSpecify: React.FC<ChildProps> = ({ currentStep, setCurrentStep }) =
     commentsEnabled: true,
     ratingsEnabled: true,
   })
-
   const thumbnailInputRef = useRef<HTMLInputElement>(null)
   const [thumbnailUrl, setThumbnailUrl] = useState("")
+
+  const isLoggedIn = useRecoilValue(isLoggedInatom);
 
   const handleThumbnailSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -315,14 +318,34 @@ const DetailsSpecify: React.FC<ChildProps> = ({ currentStep, setCurrentStep }) =
               Back to Details
             </Button>
             <div className="space-x-4">
-              <Button
+
+
+              { isLoggedIn && (<Button
                 onClick={handlePublish}
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8"
                 disabled={!videoPayload.title.trim()}
               >
                 Publish Video
-              </Button>
+              </Button>)}
 
+              { !isLoggedIn && (<Button
+                onClick={()=>{
+                  navigate('/signin')
+                }}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8"
+              >
+                Sign in First
+              </Button>)}
+
+             {!isLoggedIn && (<div className="fixed top-4 right-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-2xl shadow-lg max-w-sm text-right z-50">
+  <h2 className="text-lg font-semibold mb-2">🔐 Test Credentials</h2>
+  <p className="text-sm">For testing, use:</p>
+  <p className="mt-2 font-mono text-base leading-relaxed">
+    <span className="block">Email: <span className="font-semibold">guest@gmail.com</span></span>
+    <span className="block">Password: <span className="font-semibold">guest@123</span></span>
+  </p>
+</div>
+)}
               
 
       

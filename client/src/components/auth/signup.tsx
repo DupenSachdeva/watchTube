@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { useAuth } from "../../hooks/use-auth"
 import Error from "../../UtilComponents/error"
+import { useSetRecoilState } from "recoil"
+import { isLoggedInatom } from "../../recoil/atoms/isLoggedIn"
 
 export default function Signup() {
   const navigate = useNavigate()
@@ -15,8 +17,8 @@ export default function Signup() {
   const [password, setPassword] = useState("")
   const [email, setEmail] = useState("")
 
-  const { signup, loading, error } = useAuth()
-
+  const { signup, signin , loading, error } = useAuth()
+  const setIsloggedin = useSetRecoilState(isLoggedInatom);
   return (
     <>
       {loading && (
@@ -133,6 +135,7 @@ export default function Signup() {
                 className="group relative w-full flex justify-center py-4 px-6 border border-transparent text-lg font-semibold rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-200 hover:scale-105 shadow-lg"
                 onClick={() => {
                   signup(name, email, password)
+                  setIsloggedin(true)
                 }}
                 disabled={loading}
               >
@@ -176,7 +179,8 @@ export default function Signup() {
               <button
                 type="button"
                 className="text-blue-400 hover:text-blue-300 font-semibold transition-colors duration-200 hover:underline"
-                onClick={() => navigate("/signin")}
+                onClick={() => {navigate("/signin")
+                }}
               >
                 Sign in here
               </button>

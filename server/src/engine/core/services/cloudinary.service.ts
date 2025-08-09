@@ -20,7 +20,7 @@ export class CloudinaryService {
     const storage = new CloudinaryStorage({
       cloudinary: cloudinary.v2,
       params: {
-        folder: `youtube/${userId}upload/channel_picture`,  // Folder for channel picture
+        folder: `youtube/${userId}upload/channel_picture`,  
         allowed_formats: ['jpg', 'png', 'jpeg'],
       } as any, 
     });
