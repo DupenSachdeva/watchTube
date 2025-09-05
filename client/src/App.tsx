@@ -7,10 +7,8 @@ import { VideoSection } from "./components/video/VideoTypesheader";
 import { Signin, Signup } from "./components/auth";
 import { Profile } from "./components/profile";
 import { Channel } from "./components/channel-info";
-import { useFetchChannelData } from "./hooks/use-fetch";
 import { UploadVideo } from "./components/video/videoUpload";
 import Details from "./components/video/videoUpload/details";
-import VideoPlayer from "./components/videoPlayer/videoPlayer";
 import { VideoDetail } from "./components/video/videoDetailShow";
 
 function App() {

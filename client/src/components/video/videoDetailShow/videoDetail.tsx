@@ -11,7 +11,6 @@ import { Separator } from "@/components/ui/separator"
 import { ThumbsUp, ThumbsDown, Share2, Save, MoreHorizontal } from "lucide-react"
 import { Header } from "../../header"
 import VideoPlayer from "../../videoPlayer/videoPlayer"
-import { useGetVideos } from "../../../hooks/useGetVideos"
 import { BACKEND_URL } from "../../../config/config"
 import { isLoggedInatom } from "../../../recoil/atoms/isLoggedIn"
 

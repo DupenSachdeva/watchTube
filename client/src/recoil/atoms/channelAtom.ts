@@ -1,4 +1,4 @@
-import { atom, type AtomEffect } from "recoil";
+import { atom  } from "recoil";
 
 export interface ChannelData {
   name: string;
