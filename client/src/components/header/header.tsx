@@ -39,6 +39,7 @@ export default function Header() {
             ColorTube
           </h1>
         </div>
+
         <div className="flex-1 max-w-xl mx-4">
           <div className="relative">
             <Input
@@ -49,9 +50,10 @@ export default function Header() {
             <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
           </div>
         </div>
+
         <div className="flex items-center space-x-4">
           <Button onClick={()=>{
-             navigate("uploadVideo")
+             navigate("/uploadVideo")
           }}
             variant="ghost"
             size="icon"
@@ -101,7 +103,7 @@ export default function Header() {
             <Button
               variant="ghost"
               className="w-full justify-start text-slate-700 hover:bg-sky-50 hover:text-sky-700 rounded-lg transition-colors duration-200"
-              onClick={() => navigate("profile")}
+              onClick={() => navigate("/profile")}
             >
               <User className="mr-2 h-5 w-5" />
               Profile

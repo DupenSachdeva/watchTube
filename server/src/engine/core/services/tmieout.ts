@@ -11,7 +11,7 @@ import { catchError, timeout } from 'rxjs/operators';
 export class TimeoutInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      timeout(180000), // ✅ Set timeout to 3 minutes
+      timeout(180000), // 
       catchError((err) => {
         if (err instanceof TimeoutError) {
           return throwError(() => new Error('Timeout waiting for parallel processing.'));

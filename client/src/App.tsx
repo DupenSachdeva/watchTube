@@ -18,15 +18,19 @@ function App() {
   
   return (
     <Routes>
-
+      
       <Route path="/" element = {<Home></Home>}>
       
-          <Route index element={<Navigate to="video/trending" replace />} />
+        <Route index element={<Navigate to="video/trending" replace />} />
 
         <Route path="profile" element={<Profile></Profile>}></Route>
 
         <Route path="channel-info" element={<Channel></Channel>}></Route>
-
+        
+        <Route path = "uploadVideo" element={<UploadVideo></UploadVideo>}>
+            <Route path="details" element={<Details></Details>}></Route>
+            <Route path = "settings"></Route>
+        </Route>
 
         <Route path="video" element={<VideoSection />}> 
 
@@ -75,6 +79,8 @@ function App() {
         </Route>
 
       </Route>
+
+      
 
       
       <Route path="/video/:id" element={<VideoDetail></VideoDetail>}></Route>

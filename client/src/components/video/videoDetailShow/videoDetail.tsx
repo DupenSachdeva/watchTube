@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
-import { useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { VideoListAtom } from "@/recoil/atoms/videoAtom"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -13,15 +13,20 @@ import { Header } from "../../header"
 import VideoPlayer from "../../videoPlayer/videoPlayer"
 import { useGetVideos } from "../../../hooks/useGetVideos"
 import { BACKEND_URL } from "../../../config/config"
+import { isLoggedInatom } from "../../../recoil/atoms/isLoggedIn"
 
 
 export default  function VideoDetail() {
   const { id } = useParams()
-  const videos = useRecoilValue(VideoListAtom)
+
+  const [videos,setVideos] = useRecoilState(VideoListAtom)
   
+  const isLoggedIn = useRecoilValue(isLoggedInatom)
   
 
   const video = videos.find((v) => String(v.id) === id)
+
+
   const [isSubscribed , setIsSubscribed] = useState<boolean>();
 
 
@@ -94,6 +99,14 @@ export default  function VideoDetail() {
       });
 
       setIsSubscribed(false);
+
+      setVideos((videos) =>
+  videos.map((vid) =>
+    String(vid.id) === id
+      ? { ...vid, subscriptions: vid.subscriptions - 1 }
+      : vid
+  )
+);
                 }}
                 >
                   Unsubscribe
@@ -101,6 +114,12 @@ export default  function VideoDetail() {
 
                 {!isSubscribed && (<Button className="ml-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 py-2"
                  onClick={async ()=>{
+
+                  if(!isLoggedIn){
+                  alert('please login first');
+                  return;
+                }
+                  
                   console.log("channel id is");
                   
                   console.log(video.channelId);
@@ -116,6 +135,16 @@ export default  function VideoDetail() {
       });
 
       setIsSubscribed(true);
+
+      setVideos((videos) =>
+  videos.map((vid) =>
+    String(vid.id) === id
+      ? { ...vid, subscriptions: vid.subscriptions + 1 }
+      : vid
+  )
+);
+
+
                 }}
                 >
                   Subscribe
