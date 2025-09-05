@@ -36,7 +36,7 @@ export default function Header() {
             navigate('/home')
           }}
           >
-            ColorTube
+            watchTube
           </h1>
         </div>
 
