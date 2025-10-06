@@ -153,22 +153,7 @@ export default  function VideoDetail() {
 
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <Button variant="ghost" className="flex items-center gap-1 rounded-full px-3">
-                  <ThumbsUp className="w-4 h-4" />
-                  <span>12K</span>
-                </Button>
-                <Button variant="ghost" className="flex items-center gap-1 rounded-full px-3">
-                  <ThumbsDown className="w-4 h-4" />
-                  <span>Dislike</span>
-                </Button>
-                <Button variant="ghost" className="flex items-center gap-1 rounded-full px-3">
-                  <Share2 className="w-4 h-4" />
-                  <span>Share</span>
-                </Button>
-                <Button variant="ghost" className="flex items-center gap-1 rounded-full px-3">
-                  <Save className="w-4 h-4" />
-                  <span>Save</span>
-                </Button>
+                
                 <Button variant="ghost" className="rounded-full px-3">
                   <MoreHorizontal className="w-4 h-4" />
                 </Button>
@@ -176,9 +161,7 @@ export default  function VideoDetail() {
             </div>
             <Separator className="my-4" />
             <div className="bg-gray-100 p-4 rounded-lg text-sm">
-              <p className="font-semibold mb-1">
-                {"100K"} views • {new Date(video.uploadedAt).toLocaleDateString()}
-              </p>
+              
               <p className="whitespace-pre-wrap">{video.description}</p>
             </div>
 
