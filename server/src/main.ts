@@ -18,7 +18,7 @@ async function bootstrap() {
   }));
   
   app.enableCors({
-    origin: '*', // or '*' to allow all origins
+    origin: '*', 
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type, Authorization',
   });

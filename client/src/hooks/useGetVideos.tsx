@@ -1,8 +1,8 @@
 import { useRecoilState } from "recoil";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { VideoListAtom, type Video } from "../recoil/atoms/videoAtom";
 import { BACKEND_URL } from "../config/config";
+import { VideoListAtom, type Video } from "../recoil/atoms/videoAtom";
 
 export function useGetVideos() {
 

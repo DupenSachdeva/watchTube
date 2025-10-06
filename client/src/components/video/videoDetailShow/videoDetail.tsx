@@ -13,6 +13,7 @@ import { Header } from "../../header"
 import VideoPlayer from "../../videoPlayer/videoPlayer"
 import { BACKEND_URL } from "../../../config/config"
 import { isLoggedInatom } from "../../../recoil/atoms/isLoggedIn"
+import CommentSection from "./CommentSection"
 
 
 export default  function VideoDetail() {
@@ -180,13 +181,15 @@ export default  function VideoDetail() {
               </p>
               <p className="whitespace-pre-wrap">{video.description}</p>
             </div>
+
             <div className="mt-8">
-              <h3 className="text-xl font-semibold mb-4">Comments</h3>
-              <div className="text-gray-500">
-                <p>No comments yet. Be the first to comment!</p>
-              </div>
+
+              <CommentSection videoId={id}></CommentSection>
             </div>
+
           </div>
+
+
           <div className="flex flex-col gap-4">
             <h2 className="text-xl font-bold mb-2">Up Next</h2>
             {upNextVideos.map((upNextVideo) => (

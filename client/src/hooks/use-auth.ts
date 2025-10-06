@@ -84,13 +84,17 @@ export const useAuth = () => {
 
       } else {
         
+        if(data.success == false)
+        alert("please create an account first");
+        
+        else{
         localStorage.setItem("token", data.token)
         const name = data.name;
         setusername(data.name)
         setuseremail(email)
         setChannelData({...channelData,name})
         
-        navigate("/home");
+        navigate("/home");}
 
         
       }

@@ -73,4 +73,30 @@ export class VideoController {
     return this.VideosService.getPaginatedVideos(pageNumber,pageSize)
   }
 
+  @Get('/comments')
+  async getComments(
+    @Query('videoId') videoId:string
+){
+
+  return this.VideosService.getComments(videoId)
+}
+
+ @Post('/comment')
+ async comment(@Body() body : Record<string,any>,
+               @Query('videoId') videoId :string,
+               @Query('parentId') parentId : string
+){
+   return this.VideosService.comment(videoId,parentId,body)
+}
+
+ @Post('/comment/like')
+ async likeComment(@Query('id') id :string){
+    return this.VideosService.likeComment(id);
+ }
+
+ @Post('/comment/dislike')
+ async dislikeComment(@Query('id') id:string){
+  return this.VideosService.dislikeComment(id);
+ }
+
 }

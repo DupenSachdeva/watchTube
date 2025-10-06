@@ -14,163 +14,111 @@ import { channelAtom } from "../../recoil/atoms/channelAtom"
 
 export default function Signin() {
   const navigate = useNavigate()
-  const [name, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [email, setEmail] = useState("")
 
-  const { signup , signin, loading, error } = useAuth()
+  const { signin, loading, error } = useAuth()
   const setChannelData = useSetRecoilState(channelAtom)
-
   const setIsloggedin = useSetRecoilState(isLoggedInatom);
+
   return (
     <>
       {loading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-blue-900 text-white p-4 rounded-lg">Loading...</div>
+        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+          <div className="bg-white text-gray-700 p-4 rounded-lg shadow">Loading...</div>
         </div>
       )}
-      {error && (
-        <Error></Error>
-      )}
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-black py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-lg w-full space-y-8 bg-black bg-opacity-80 p-10 rounded-2xl shadow-2xl backdrop-blur-lg border border-blue-500/30">
+      {error && <Error />}
+
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+        <div className="w-full max-w-md bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+          
+          {/* Logo */}
           <div className="text-center">
-            <div className="bg-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <Tv className="h-10 w-10 text-white" />
+            <div className="bg-gray-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5 shadow-sm">
+              <Tv className="h-8 w-8 text-gray-700" />
             </div>
-            <h2 className="text-4xl font-bold text-white mb-2">
-              Welcome to <span className="text-blue-400">ColorTube</span>
+            <h2 className="text-3xl font-bold text-gray-900">
+              Welcome to <span className="text-indigo-600">WatchTube</span>
             </h2>
-            <p className="text-blue-200 text-lg">Sign In</p>
+            <p className="text-gray-500 mt-1">Sign in to continue</p>
           </div>
 
-          <div className="mt-10 space-y-6">
-           
-
-              <div>
-                <Label htmlFor="email-address" className="block text-sm font-medium text-blue-200 mb-2">
-                  Email Address
-                </Label>
-                <div className="relative">
-                  <svg
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-blue-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-                    />
-                  </svg>
-                  <Input
-                    id="email-address"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    className="pl-10 w-full px-4 py-3 bg-blue-950/50 border border-blue-500/50 rounded-xl text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="password" className="block text-sm font-medium text-blue-200 mb-2">
-                  Password
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-blue-400" />
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="new-password"
-                    required
-                    className="pl-10 w-full px-4 py-3 bg-blue-950/50 border border-blue-500/50 rounded-xl text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="Create a strong password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between pt-2">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-blue-400 rounded bg-blue-950/50"
+          {/* Form */}
+          <div className="mt-8 space-y-6">
+            <div>
+              <Label htmlFor="email" className="block text-sm text-gray-700 mb-1">Email</Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  className="pl-10 w-full bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
-                <Label htmlFor="remember-me" className="ml-3 block text-sm text-blue-200">
-                  I agree to the Terms & Conditions
-                </Label>
               </div>
             </div>
 
-            <div className="pt-4">
-              <Button
-                type="button"
-                className="group relative w-full flex justify-center py-4 px-6 border border-transparent text-lg font-semibold rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-200 hover:scale-105 shadow-lg"
-                onClick={() => {
-                  signin( email, password)
-                  setIsloggedin(true)
-                }}
-                disabled={loading}
-              >
-                {loading ? (
-                  <div className="flex items-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Signing in...
-                  </div>
-                ) : (
-                  <>
-                    <span className="absolute left-0 inset-y-0 flex items-center pl-4">
-                      <User className="h-6 w-6 text-blue-300 group-hover:text-blue-200 transition-colors" />
-                    </span>
-                    Sign In
-                  </>
-                )}
-              </Button>
+            <div>
+              <Label htmlFor="password" className="block text-sm text-gray-700 mb-1">Password</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  className="pl-10 w-full bg-gray-50 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
             </div>
 
-            <div className="text-center pt-6 border-t border-blue-500/30">
-              <p className="text-blue-200 mb-3">Dont have account , create one</p>
+            {/* Terms */}
+            <div className="flex items-center space-x-2">
+              <input
+                id="terms"
+                type="checkbox"
+                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              />
+              <Label htmlFor="terms" className="text-sm text-gray-600">
+                I agree to the <span className="text-indigo-600 hover:underline cursor-pointer">Terms & Conditions</span>
+              </Label>
+            </div>
+
+            {/* Button */}
+            <Button
+              type="button"
+              className="w-full py-3 rounded-lg font-semibold text-white text-lg bg-indigo-600 hover:bg-indigo-700 shadow transition"
+              onClick={() => {
+                signin(email, password)
+                setIsloggedin(true)
+              }}
+              disabled={loading}
+            >
+              {loading ? "Signing in..." : "Sign In"}
+            </Button>
+          </div>
+
+          {/* Footer */}
+          <div className="mt-6 text-center">
+            <p className="text-gray-600 text-sm">
+              Don’t have an account?{" "}
               <button
                 type="button"
-                className="text-blue-400 hover:text-blue-300 font-semibold transition-colors duration-200 hover:underline"
-                onClick={() => {navigate("/signup")
-                  
-                }}
+                onClick={() => navigate("/signup")}
+                className="text-indigo-600 hover:underline font-medium"
               >
-                Create Account
+                Create one
               </button>
-            </div>
+            </p>
+          </div>
         </div>
       </div>
     </>

@@ -6,10 +6,11 @@ import { Button } from "../ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useSetRecoilState } from "recoil"
 import { usernameAtom, usernameEmail } from "../../recoil/atoms/userAtom"
 import { channelAtom } from "../../recoil/atoms/channelAtom"
 import { isLoggedInatom } from "../../recoil/atoms/isLoggedIn"
+import { searchAtom } from "../../recoil/atoms/searchAtom"
 
 export default function Header() {
   const navigate = useNavigate()
@@ -18,6 +19,7 @@ export default function Header() {
   const email = useRecoilValue(usernameEmail)
   const channel = useRecoilValue(channelAtom)
   const isLoggedIn = useRecoilValue(isLoggedInatom)
+  const setSearch = useSetRecoilState(searchAtom);
   console.log(name);
   
   return (
@@ -45,6 +47,7 @@ export default function Header() {
             <Input
               type="search"
               placeholder="Search"
+              onChange={(e)=>{setSearch(e.target.value)}}
               className="w-full p-6 bg-white bg-opacity-50 border border-slate-200 placeholder-slate-400 text-slate-800 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 rounded-full"
             />
             <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400" />

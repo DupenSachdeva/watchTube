@@ -1,5 +1,4 @@
 import { DatabaseService } from 'src/engine/database/database.service';
-// src/videos/videos.service.ts
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { CloudinaryService } from '../../engine/core/services/cloudinary.service';
 
@@ -30,7 +29,6 @@ export class VideosService {
       throw new BadRequestException('Title and description are required');
     }
 
-    // 2. Upload thumbnail (image)
     
     const video = await this.databaseService.video.create({
      
@@ -126,6 +124,91 @@ export class VideosService {
       })),
     };
   }
+
+  async getComments(random : string){
+
+          let videoId = parseInt(random);
+          
+          const comments = await this.databaseService.comment.findMany({
+            where:{
+              videoId:videoId,
+            },
+            include:{
+              replies:true
+            }
+            
+          })
+
+          return comments;
+  }
+
+  async comment(randomId : string , parId : string , Body : Record<string,any>){
+      let videoId = parseInt(randomId);
+      let parentId = parseInt(parId);
+      let comment;
+
+      let content = Body.content;
+      
+      if(parentId == -1)
+       comment = await this.databaseService.comment.create({
+        data:{
+          videoId:videoId,
+          content:content
+        }
+      });
+
+      else {
+        comment = await this.databaseService.comment.create({
+          data:{
+          videoId:videoId,
+          content:Body.comment,
+          parent:{connect:{id:parentId}}
+        },
+        
+        })
+      }
+
+      return {
+        comment,
+        Success:true
+      }
+  }
+
+  async likeComment(idsample : string){
+     let id = parseInt(idsample);
+     const comment = await this.databaseService.comment.update({
+      where:{id:id},
+      data:{
+        likes:{
+          increment:1
+        }
+      }
+     })
+
+     return {
+      success:true,
+      comment:comment
+     }
+  }
+
+  async dislikeComment(idsample : string){
+     let id = parseInt(idsample);
+     const comment = await this.databaseService.comment.update({
+      where:{id:id},
+      data:{
+        dislikes:{
+          increment:1
+        }
+      }
+     })
+
+     return {
+      success:true,
+      comment:comment
+     }
+  }
+
+
 
   
 }
