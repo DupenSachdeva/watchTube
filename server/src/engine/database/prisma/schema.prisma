@@ -37,6 +37,7 @@ model Channel {
   about              String?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
+
   subscribers        Int       @default(0)
   
   user               User?
@@ -85,6 +86,9 @@ model Video{
 
   user User @relation(fields: [userId],references: [id])
   userId Int
+
+  comments Comment[]
+
 }
 
 
@@ -100,7 +104,8 @@ model Comment {
   dislikes Int @default(0)
   
   channel   Channel  @relation(fields: [channelId], references: [id])
-
+  
+  video    Video @relation(fields: [videoId],references: [id])
 
   channelId Int 
   parentId  Int?      
