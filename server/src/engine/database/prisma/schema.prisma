@@ -27,6 +27,7 @@ model User {
   subscriptions Channel[] @relation("UserSubscriptions")
 
   videos       Video[]
+  Likes       Like[]
 }
 
 model Channel {
@@ -111,4 +112,12 @@ model Comment {
   parentId  Int?      
 
   createdAt DateTime  @default(now())
+}
+
+
+model Like{
+
+  id       Int       @id @default(autoincrement())
+  LikedBy User      @relation(fields: [likedById], references: [id])
+  likedById Int
 }
