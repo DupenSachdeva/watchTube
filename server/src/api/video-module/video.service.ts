@@ -142,37 +142,71 @@ export class VideosService {
           return comments;
   }
 
-  async comment(randomId : string , parId : string , Body : Record<string,any>){
-      let videoId = parseInt(randomId);
-      let parentId = parseInt(parId);
-      let comment;
+  async comment(
+  randomId: string,
+  parId: string,
+  Body: Record<string, any>
+) {
 
-      let content = Body.content;
-      
-      if(parentId == -1)
-       comment = await this.databaseService.comment.create({
-        data:{
-          videoId:videoId,
-          content:content
-        }
-      });
+  const videoId = parseInt(randomId);
+  const parentId = parseInt(parId);
 
-      else {
-        comment = await this.databaseService.comment.create({
-          data:{
-          videoId:videoId,
-          content:Body.comment,
-          parent:{connect:{id:parentId}}
+  const content = Body.content;
+
+  let comment;
+
+  if (parentId === -1) {
+
+    comment = await this.databaseService.comment.create({
+      data: {
+        content,
+
+        video: {
+          connect: {
+            id: videoId
+          }
         },
-        
-        })
-      }
 
-      return {
-        comment,
-        Success:true
+        // REQUIRED because Comment has mandatory channel relation
+        channel: {
+          connect: {
+            id: Body.channelId
+          }
+        }
       }
+    });
+
+  } else {
+
+    comment = await this.databaseService.comment.create({
+      data: {
+        content,
+
+        video: {
+          connect: {
+            id: videoId
+          }
+        },
+
+        parent: {
+          connect: {
+            id: parentId
+          }
+        },
+
+        // REQUIRED because Comment has mandatory channel relation
+        channel: {
+          connect: {
+            id: Body.channelId
+          }
+        }
+      }
+    });
+
   }
+
+  return comment;
+}
 
   async likeComment(idsample : string){
      let id = parseInt(idsample);
